@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RaththamTN · Tamil Nadu Blood Donor Network</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>🩸</text></svg>">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<header><a class="brand" href="/"><svg viewBox="0 0 24 24"><path fill="#c1121f" d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/></svg>Raththam<span>TN</span></a>
+<nav><a href="/search">Find donors</a><a href="/requests">Open requests</a><a href="/register">Become a donor</a>
+{% if session.admin %}<a href="/admin">Dashboard</a><a href="/admin/logout">Log out</a>{% else %}<a href="/admin/login">Admin</a>{% endif %}
+<a class="cta" href="/request">Request blood</a></nav></header>
+<main>{% for m in get_flashed_messages() %}<p class="flash">{{ m }}</p>{% endfor %}{% block body %}{% endblock %}</main>
+<footer>RaththamTN · Tamil Nadu Blood Donor Network · College DBMS project · Flask + PostgreSQL</footer></body></html>

@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block body %}<h1>Record donation</h1>
+<p>Patient <b>{{ req.name }}</b> needs <b>{{ req.blood_group }}</b> in {{ req.district }}. Showing eligible donors from this and nearby districts.</p>
+{% if donors %}<form method="post" class="panel">
+<label>Donor<select name="donor_id">{% for d in donors %}<option value="{{ d.donor_id }}">{{ d.name }} · {{ d.blood_group }} · {{ d.district }} ({{ d.phone }})</option>{% endfor %}</select></label>
+<label>Units<input name="units" type="number" min="1" max="2" value="1"></label>
+<button class="btn">Save donation</button></form>
+{% else %}<div class="empty">No eligible donor with this blood group nearby right now.</div>{% endif %}{% endblock %}

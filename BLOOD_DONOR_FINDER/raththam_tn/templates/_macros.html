@@ -1,0 +1,3 @@
+{% macro district_select(name='district', sel='', any=False) %}<select name="{{ name }}" {{ '' if any else 'required' }}>
+<option value="">{{ 'All Tamil Nadu (overall)' if any else 'Choose district' }}</option>{% for d in DISTRICTS %}<option {{ 'selected' if d==sel }}>{{ d }}</option>{% endfor %}</select>{% endmacro %}
+{% macro group_select(groups, sel='', any=False) %}<select name="{{ 'bg' if any else 'blood_group' }}">{% if any %}<option value="">Any blood group</option>{% endif %}{% for g in groups %}<option {{ 'selected' if g==sel }}>{{ g }}</option>{% endfor %}</select>{% endmacro %}

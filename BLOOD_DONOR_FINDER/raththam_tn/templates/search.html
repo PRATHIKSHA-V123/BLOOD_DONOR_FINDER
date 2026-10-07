@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% from "_macros.html" import district_select, group_select with context %}{% block body %}<h1>Find donors</h1>
+<form method="get" class="inline">{{ group_select(groups, bg, True) }}{{ district_select('district', district, True) }}
+<label class="chk"><input type="checkbox" name="nearby" value="1" {{ 'checked' if nearby }}>Include nearby districts</label><button class="btn">Search</button></form>
+<p class="hint">{{ donors|length }} available donor{{ '' if donors|length==1 else 's' }}{% if bg %} for <b>{{ bg }}</b>{% endif %}{% if area %} in {{ area|join(', ') if area|length<=4 else area[0] ~ ' + ' ~ (area|length-1) ~ ' nearby districts' }}{% endif %}</p>
+{% if donors %}<div class="cards">{% for d in donors %}<div class="dcard"><div class="top"><div><h3>{{ d.name }}</h3><span class="meta">{{ d.district }} · {{ d.age }} yrs</span></div><span class="bg">{{ d.blood_group }}</span></div>
+<div class="row"><span class="badge">✓ Can donate today</span>{% if d.total_donations>=5 %}<span class="badge star">★ {{ d.total_donations }} donations</span>{% endif %}{% if district and d.district!=district %}<span class="badge near">Nearby</span>{% endif %}</div>
+<span class="meta">Last donated: {{ d.last_donation_date or 'Never' }}</span>
+<div class="row"><a class="btn sm" href="tel:+91{{ d.phone }}">📞 {{ d.phone }}</a><a class="btn sm wa" href="https://wa.me/91{{ d.phone }}?text=Hi%2C%20we%20urgently%20need%20{{ (bg or d.blood_group)|urlencode }}%20blood.%20Can%20you%20help%3F" target="_blank" rel="noopener">WhatsApp</a></div></div>{% endfor %}</div>
+{% else %}<div class="empty">No available donors match. Try "Include nearby districts", another group, or <a href="/request">post a request</a>.</div>{% endif %}
+{% if bg %}<h2>🏥 Blood already in hospital stock</h2>
+{% if stock %}<table><tr><th>Hospital</th><th>District</th><th>Phone</th><th>Units</th></tr>{% for s in stock %}<tr><td>{{ s.name }}</td><td>{{ s.district }}</td><td>{{ s.phone }}</td><td><b>{{ s.units }}</b></td></tr>{% endfor %}</table>
+{% else %}<div class="empty">No {{ bg }} units recorded in stock here. Call nearby blood banks.</div>{% endif %}
+{% if waiting %}<h2>⏳ Donated recently: not eligible yet</h2><p class="hint">Please do not ask these donors to donate before the date shown.</p>
+<table><tr><th>Name</th><th>District</th><th>Can donate again from</th></tr>{% for w in waiting %}<tr><td>{{ w.name }}</td><td>{{ w.district }}</td><td>{{ w.eligible_from }}</td></tr>{% endfor %}</table>{% endif %}{% endif %}
+{% endblock %}

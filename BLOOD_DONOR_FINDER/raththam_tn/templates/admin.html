@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% macro bars(rows, k) %}{% set m = (rows|map(attribute='n' if k!='units' else 'units')|map('int')|max) or 1 %}<div class="bars">{% for r in rows %}{% set v = (r.units if k=='units' else r.n)|int %}<div class="bar"><span>{{ r[k] if k!='units' else r.blood_group }}</span><i style="width:{{ (v*100/m)|round|int }}%"></i><b>{{ v }}</b></div>{% endfor %}</div>{% endmacro %}
+{% block body %}<h1>Dashboard</h1>
+<div class="stats"><div class="stat"><b>{{ totals.donors }}</b><span>Donors</span></div><div class="stat"><b>{{ totals.available }}</b><span>Can donate now</span></div>
+<div class="stat"><b>{{ totals.pending }}</b><span>Pending requests</span></div><div class="stat"><b>{{ totals.units }}</b><span>Units donated</span></div></div>
+<h2>Pending requests</h2>
+<table><tr><th>Urgency</th><th>Patient</th><th>Group</th><th>Units needed</th><th>District</th><th></th></tr>
+{% for r in pending %}<tr class="{{ r.urgency|lower }}"><td>{{ r.urgency }}</td><td>{{ r.name }}</td><td><b>{{ r.blood_group }}</b></td><td><b>{{ [r.units_needed - r.received, 0]|max }}</b> more of {{ r.units_needed }}</td><td>{{ r.district }}</td><td><a href="/admin/donate/{{ r.request_id }}">Record donation</a></td></tr>
+{% else %}<tr><td colspan="6">Nothing pending.</td></tr>{% endfor %}</table>
+{% if low %}<h2>⚠ Low stock of rare-negative groups</h2>{% for l in low %}<div class="alert"><b>{{ l.blood_group }}</b>: {{ l.units }} unit(s) at {{ l.name }}</div>{% endfor %}{% endif %}
+<div class="two"><div><h2>Donors by blood group</h2>{{ bars(by_group, 'blood_group') }}</div><div><h2>Top 10 districts by donors</h2>{{ bars(by_district, 'district') }}</div></div>
+<h2>Total stock across Tamil Nadu (units)</h2>{{ bars(stock, 'units') }}{% endblock %}

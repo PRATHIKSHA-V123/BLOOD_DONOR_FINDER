@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% from "_macros.html"import district_select, group_select with context %}{% block body %}
+<section class="hero"><svg class="drop" viewBox="0 0 24 24"><path fill="#fff" d="M12 2C12 2 5 10 5 15a7 7 0 0014 0c0-5-7-13-7-13z"/></svg>
+<h1>Every drop counts. Find blood across Tamil Nadu.</h1>
+<p>{{ totals.donors }} donors in {{ totals.districts }} districts. Donors who gave blood in the last 90 days are hidden automatically, so every name you see can donate today.</p>
+<form class="finder" action="/search" method="get">{{ group_select(groups, any=True) }}{{ district_select('district', '', True) }}<input type="hidden" name="nearby" value="1"><button class="btn">Find donors</button></form></section>
+<div class="stats"><div class="stat"><b>{{ totals.donors }}</b><span>Registered donors</span></div><div class="stat"><b>{{ totals.available }}</b><span>Can donate right now</span></div>
+<div class="stat"><b>{{ totals.districts }}/38</b><span>Districts covered</span></div><div class="stat"><b>{{ totals.hospitals }}</b><span>Hospitals &amp; blood banks</span></div></div>
+{% if sos %}<h2><span class="pulse"></span>Needed right now</h2><div class="sos">{% for r in sos %}<div class="{{ r.urgency|lower }}"><span class="t">{{ r.urgency }}</span><br><b class="g">{{ r.blood_group }}</b> {{ r.name }}<br><b>{{ [r.units_needed - r.received, 0]|max }} unit(s) needed</b><br><small class="hint">{{ r.hospital }}, {{ r.district }}</small><br><a href="/search?bg={{ r.blood_group|urlencode }}&district={{ r.district }}&nearby=1">Find matching donors →</a></div>{% endfor %}</div>{% endif %}
+<h2>Donors available now, by blood group</h2>
+<div class="groups">{% for g in groups %}<a href="/search?bg={{ g|urlencode }}"><b>{{ g }}</b><span>{{ counts.get(g,0) }} available</span></a>{% endfor %}</div>
+<h2>🏅 Hero donors</h2><div class="heroes">{% for h in heroes %}<div class="hero-row"><span class="rank">#{{ loop.index }}</span><span class="n"><b>{{ h.name }}</b><br><small>{{ h.district }}</small></span><span class="bg">{{ h.blood_group }}</span><span class="cnt">{{ h.total_donations }} donations</span></div>{% endfor %}</div>
+<h2>How it works</h2><div class="steps"><div><b>1. Search</b><br>Pick a blood group and district. Turn on "nearby districts" to widen the search.</div><div><b>2. Contact</b><br>Call or WhatsApp an eligible donor directly from the card.</div><div><b>3. Record</b><br>The admin records the donation and the database trigger updates stock and the donor's next date.</div></div>
+{% endblock %}

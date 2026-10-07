@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block body %}<h1>Blood requests</h1>
+<table><tr><th>Urgency</th><th>Patient</th><th>Group</th><th>Units needed</th><th>Hospital</th><th>District</th><th>Contact</th><th>Status</th>{% if session.admin %}<th></th>{% endif %}</tr>
+{% for r in rows %}<tr class="{{ r.urgency|lower }}"><td>{{ r.urgency }}</td><td>{{ r.name }}</td><td><b>{{ r.blood_group }}</b></td><td>{% if r.status=='Pending' %}<b>{{ [r.units_needed - r.received, 0]|max }}</b> more of {{ r.units_needed }}{% else %}{{ r.units_needed }} unit(s){% endif %}</td><td>{{ r.hospital }}</td><td>{{ r.district }}</td><td>{{ r.phone }}</td><td>{{ r.status }}</td>
+{% if session.admin %}<td>{% if r.status=='Pending' %}<a href="/admin/donate/{{ r.request_id }}">Record donation</a>{% endif %}</td>{% endif %}</tr>
+{% else %}<tr><td colspan="9">No requests yet.</td></tr>{% endfor %}</table>{% endblock %}

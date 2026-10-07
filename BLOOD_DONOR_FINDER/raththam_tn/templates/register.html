@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% from "_macros.html" import district_select, group_select with context %}{% block body %}<h1>Become a donor</h1><p class="hint">One donation can save up to three lives.</p>
+<form method="post" class="panel">
+<label>Full name<input name="name" required></label>
+<label>Age (18 to 65)<input name="age" type="number" min="18" max="65" required></label>
+<label>Gender<select name="gender"><option>Male</option><option>Female</option><option>Other</option></select></label>
+<label>Blood group{{ group_select(groups) }}</label>
+<label>Phone<input name="phone" pattern="[0-9]{10}" title="10 digit number" required></label>
+<label>District{{ district_select() }}</label>
+<label>Last donation date (leave empty if never)<input name="last_donation_date" type="date"></label>
+<button class="btn">Register</button></form>{% endblock %}

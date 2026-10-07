@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% from "_macros.html" import district_select, group_select with context %}{% block body %}<h1>Request blood</h1>
+<form method="post" class="panel">
+<label>Patient name<input name="name" required></label>
+<label>Patient age<input name="age" type="number" min="0" max="120" required></label>
+<label>Blood group needed{{ group_select(groups) }}</label>
+<label>Hospital<select name="hospital_id">{% for h in hospitals %}<option value="{{ h.hospital_id }}">{{ h.name }}</option>{% endfor %}</select></label>
+<label>District{{ district_select() }}</label>
+<label>Contact phone<input name="phone" pattern="[0-9]{10}" title="10 digit number" required></label>
+<label>How urgent?<select name="urgency"><option>Normal</option><option>Urgent</option><option>Emergency</option></select></label>
+<label>Units of blood needed<input name="units_needed" type="number" min="1" max="10" value="1" required></label>
+<button class="btn">Send request</button></form>{% endblock %}
